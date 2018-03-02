@@ -51,7 +51,7 @@ export default class App extends Component {
       .then(confirmResult => this.setState({ confirmResult }))
       .catch(error => this.setState({ message: `Sign In With Phone Number Error: ${error.message}` }));
   };
-  
+
   updateUserProfile = (displayName) => {
     const user = firebase.auth().currentUser;
     const that = this;
@@ -130,7 +130,7 @@ export default class App extends Component {
           />
         }
 
-        {user && !updateProfile && 
+        {user &&
           <Main
             user={user}
           />
