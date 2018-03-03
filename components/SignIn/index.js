@@ -1,32 +1,104 @@
 import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
+import firebase from 'react-native-firebase';
 
 export default class SignIn extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      val: props.initialVal,
+      val: '',
+      user: props.user,
+      confirmResult: props.confirmResult,
+      error: false,
     }
   }
+
+  componentDidMount() {
+    const { val, user, confirmResult } = this.state;
+    if(!user && !confirmResult && val === '') {
+      this.setState({
+        val: '+1',
+      })
+    }
+  }
+
+  signIn = (phoneNumber) => {
+    firebase.auth().signInWithPhoneNumber(phoneNumber)
+      .then(confirmResult => {
+        this.props.onSignIn(phoneNumber);
+        this.setState({
+          confirmResult,
+          phoneNumber,
+          error: false,
+          val: '',
+        });
+      })
+      .catch(error => this.setState({ error: true }));
+  };
+
+  confirmCode = (codeInput) => {
+    const { confirmResult } = this.state;
+    if (confirmResult && codeInput.length) {
+      confirmResult.confirm(codeInput)
+        .then((user) => {
+          this.props.confirmCode(user);
+          this.setState({ user });
+        })
+        .catch(error => this.setState({ error: true }));
+    }
+  };
+
   render() {
-    const { val } = this.state;
+    const { val, user, confirmResult } = this.state;
     return (
-      <View style={styles.view}>
-        <Text style={styles.title}>{this.props.title}</Text>
-        <Text style={styles.text}>{this.props.description}</Text>
-        <TextInput
-          autoFocus
-          style={styles.textInput}
-          onChangeText={value => this.setState({ val: value })}
-          placeholder={this.props.placeholder}
-          value={val}
-        />
-        <Button title={this.props.buttonText} color="#0aa0d9" style={styles.button} onPress={() => this.props.onClick(val)} />
+      <View>
+        {(!user && !confirmResult )? (
+          <SignInView
+            title="Welcome!"
+            description="Enter your phone number to sync your device"
+            placeholder="Phone number ... "
+            buttonText="Send Verification Code"
+            val={val}
+            onChangeText={value => this.setState({ val: value })}
+            onClick={this.signIn}
+            error={this.state.error}
+          />
+        ) : (
+          <SignInView
+            title="Message Sent!"
+            description="Enter your confirmation code"
+            placeholder="Confirmation Code..."
+            buttonText="Sign In"
+            val={this.state.val}
+            onChangeText={value => this.setState({ val: value })}
+            onClick={this.confirmCode}
+            error={this.state.error}
+          />
+        )}
       </View>
     );
   }
 }
 
+const SignInView = props => (
+  <View style={styles.view}>
+    <Text style={styles.title}>{props.title}</Text>
+    <Text style={styles.text}>{props.description}</Text>
+    <TextInput
+      autoFocus
+      style={styles.textInput}
+      onChangeText={props.onChangeText}
+      placeholder={props.placeholder}
+      value={props.val}
+    />
+    <Button title={props.buttonText} color="#0aa0d9" style={styles.button} onPress={() => props.onClick(props.val)} />
+    {props.error &&
+      <Text style={styles.error}>{`That doesn't seem right... try again`}</Text>
+    }
+  </View>
+)
+
+// #2d3033 - gray
 const styles = StyleSheet.create({
   view: {
     flex: 1,
@@ -37,7 +109,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#0aa0d9',
-    fontSize: 50,
+    fontSize: 30,
     textAlign: 'center',
     position: 'absolute',
     top: '15%',
@@ -47,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
     color: '#0aa0d9',
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'center',
     borderWidth: 0.5,
     borderColor: '#0aa0d9',
@@ -56,6 +128,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#0aa0d9',
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  error: {
+    color: 'red',
     fontSize: 20,
     textAlign: 'center',
   },

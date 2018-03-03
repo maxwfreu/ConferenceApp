@@ -5,6 +5,8 @@ import CreateProfile from './components/SignIn/CreateProfile';
 import Main from './components/Main';
 
 import firebase from 'react-native-firebase';
+import Spinner from 'react-native-spinkit';
+// var Spinner = require('react-native-spinkit');
 
 export default class App extends Component {
   constructor(props) {
@@ -12,11 +14,11 @@ export default class App extends Component {
     this.unsubscribe = null;
     this.state = {
       user: null,
-      message: '',
       codeInput: '',
       updateProfile: true,
       updateProfileError: false,
       confirmResult: null,
+      loaded: false,
     };
     this.updateUserProfile = this.updateUserProfile.bind(this);
   }
@@ -26,15 +28,18 @@ export default class App extends Component {
 
     this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ user: user.toJSON() });
+        this.setState({
+          user: user.toJSON(),
+          loaded: true,
+        });
       } else {
         // User has been signed out, reset the state
         this.setState({
           user: null,
-          message: '',
           updateProfile: true,
           updateProfileError: false,
           confirmResult: null,
+          loaded: true,
         });
       }
     });
@@ -46,10 +51,12 @@ export default class App extends Component {
 
   signIn = (phoneNumber) => {
     this.setState({ phoneNumber: phoneNumber});
+  };
 
-    firebase.auth().signInWithPhoneNumber(phoneNumber)
-      .then(confirmResult => this.setState({ confirmResult }))
-      .catch(error => this.setState({ message: `Sign In With Phone Number Error: ${error.message}` }));
+  confirmCode = (user) => {
+    if(user) {
+      this.setState({ user })
+    }
   };
 
   updateUserProfile = (displayName) => {
@@ -71,66 +78,36 @@ export default class App extends Component {
     });
   }
 
-  confirmCode = (codeInput) => {
-    const { confirmResult } = this.state;
-    if (confirmResult && codeInput.length) {
-      confirmResult.confirm(codeInput)
-        .then((user) => {
-          this.setState({ message: 'Code Confirmed!' });
-        })
-        .catch(error => this.setState({ message: `Code Confirm Error: ${error.message}` }));
-    }
-  };
-
-  renderMessage() {
-    const { message } = this.state;
-
-    if (!message.length) return null;
-
-    return (
-      <Text style={{ padding: 5, backgroundColor: '#000', color: '#fff' }}>{message}</Text>
-    );
-  }
-
   render() {
-    const { user, confirmResult, updateProfile } = this.state;
+    const { user, confirmResult, updateProfile, loaded } = this.state;
     let setDisplayName = false;
     if (user) {
       setDisplayName = !user.displayName || user.displayName === '';
     }
+    if(user && loaded && !setDisplayName) {
+      return (
+        <Main
+          user={user}
+        />
+      )
+    }
     return (
-      <View style={{ flex: 1 }}>
-
-        {!user && !confirmResult &&
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2d3033' }}>
+        {!loaded &&
+          <Spinner isVisible={true} size={100} type="Wave" color="#1abc9c"/>
+        }
+        {!user && loaded &&
           <SignIn
-            title="Welcome!"
-            description="Enter your phone number to sync your device"
-            placeholder="Phone number ... "
-            initialVal="+1"
-            buttonText="Send Verification Code"
-            onClick={this.signIn}
+            user={user}
+            confirmResult={confirmResult}
+            onSignIn={this.signIn}
+            onConfirmCode={this.confirmCode}
           />
         }
-
-        {!user && confirmResult &&
-          <SignIn
-            title="Message Sent!"
-            description="Enter your confirmation code"
-            placeholder="Confirmation Code..."
-            buttonText="Sign In"
-            onClick={this.confirmCode}
-          />
-        }
-        {setDisplayName && updateProfile &&
+        {setDisplayName && updateProfile && loaded &&
           <CreateProfile
             phoneNumber={this.state.phoneNumber}
             onClick={this.updateUserProfile}
-          />
-        }
-
-        {user &&
-          <Main
-            user={user}
           />
         }
       </View>

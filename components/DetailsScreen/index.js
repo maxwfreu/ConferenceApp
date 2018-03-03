@@ -6,6 +6,9 @@ import firebase from 'react-native-firebase';
 export default class DetailsScreen extends Component {
   static navigationOptions = {
     title: 'Details',
+    headerRight: (
+      <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
+    ),
   };
   render() {
     return (

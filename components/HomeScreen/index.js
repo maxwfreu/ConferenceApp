@@ -6,11 +6,14 @@ import firebase from 'react-native-firebase';
 export default class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
+    headerRight: (
+      <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
+    ),
   };
   constructor(props) {
     super(props)
     this.state = {
-      user: props.user,
+      user: firebase.auth().currentUser,
       database: firebase.database(),
       data: [],
     }
@@ -20,10 +23,6 @@ export default class HomeScreen extends Component {
 
   componentDidMount = () => {
     this.initListener();
-  }
-
-  signOut = () => {
-    firebase.auth().signOut();
   }
 
   initListener = () => {
@@ -50,11 +49,13 @@ export default class HomeScreen extends Component {
   getData() {
     const that = this;
     const { data } = this.state;
-    console.log(data);
-    for(var i = 0; i < data.length; i++) {
-      console.log(data[i]);
+    if(!data || data.length === 0) {
+      return (
+        <View style={styles.emptyView}>
+          <Text style={styles.text}>{`There are no active calls!`}</Text>
+        </View>
+      )
     }
-    // return null
     return (
       <View>
         {data.map((data, idx) => (
@@ -67,36 +68,61 @@ export default class HomeScreen extends Component {
   }
 
   render() {
+    const { user, data } = this.state;
     return (
       <View style={styles.view}>
+        <View style={styles.header}>
+          <Text style={styles.text}>Welcome, {user.displayName}</Text>
+        </View>
         <View style={styles.content}>
-          {this.getData()}
-          <Text style={styles.text}>Start A Call</Text>
-          <Button title="Start" onPress={this.createCall}/>
-          <Button
-            title="Go to Details Page"
-            onPress={() => this.props.navigation.navigate('Details')}
-          />
+          {data ? (
+            <View>
+              {this.getData()}
+            </View>
+          ) : (
+            <View style={styles.createButton}>
+              <Button color="#fff" title="Start A Call" onPress={this.createCall}/>
+            </View>
+          )}
         </View>
       </View>
     );
   }
 }
-
+// <Button
+//   title="Go to Details Page"
+//   color="#fff"
+//   onPress={() => this.props.navigation.navigate('Details')}
+// />
 const styles = StyleSheet.create({
   view: {
     flex: 1,
     padding: 25,
     backgroundColor: '#2d3033',
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  header: {
+    flex: 1,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    width: '100%',
   },
   content: {
-    flex: 1,
+    flex: 10,
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   text: {
-    color: '#0aa0d9',
+    color: '#fff',
     fontSize: 20,
     textAlign: 'center',
   },
+  createButton: {
+    borderWidth: .5,
+    borderRadius: 5,
+    borderColor: '#0aa0d9',
+    backgroundColor: '#0aa0d9',
+  },
+  emptyView: {
+    marginTop: 10,
+  }
 });

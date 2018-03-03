@@ -15,7 +15,8 @@
     "ios": "react-native run-ios",
     "rename": "node ./bin/rename.js",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "link": "react-native link"
   },
   "jest": {
     "preset": "react-native"
@@ -28,6 +29,7 @@
     "react": "^16.2.0",
     "react-native": "^0.53.0",
     "react-native-firebase": "^3.2.7",
+    "react-native-spinkit": "^1.1.1",
     "react-navigation": "^1.3.2"
   }
 }
