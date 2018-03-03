@@ -1,0 +1,228 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _react2 = require(_dependencyMap[0], "react");
+
+  var _react3 = _interopRequireDefault(_react2);
+
+  var _index = require(_dependencyMap[1], "./../../node_modules/react-transform-hmr/lib/index.js");
+
+  var _index2 = _interopRequireDefault(_index);
+
+  var _jsxFileName = "/Users/maxfreundlich/workspace/ConferenceApp/components/HomeScreen/index.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _reactNative = require(_dependencyMap[2], "react-native");
+
+  var _immutabilityHelper = require(_dependencyMap[3], "immutability-helper");
+
+  var _immutabilityHelper2 = _interopRequireDefault(_immutabilityHelper);
+
+  var _reactNativeFirebase = require(_dependencyMap[4], "react-native-firebase");
+
+  var _reactNativeFirebase2 = _interopRequireDefault(_reactNativeFirebase);
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var _components = {
+    HomeScreen: {
+      displayName: "HomeScreen"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: "/Users/maxfreundlich/workspace/ConferenceApp/components/HomeScreen/index.js",
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var HomeScreen = _wrapComponent("HomeScreen")(function (_Component) {
+    _inherits(HomeScreen, _Component);
+
+    function HomeScreen(props) {
+      _classCallCheck(this, HomeScreen);
+
+      var _this = _possibleConstructorReturn(this, (HomeScreen.__proto__ || Object.getPrototypeOf(HomeScreen)).call(this, props));
+
+      _this.componentDidMount = function () {
+        _this.initListener();
+      };
+
+      _this.signOut = function () {
+        _reactNativeFirebase2.default.auth().signOut();
+      };
+
+      _this.initListener = function () {
+        var userId = _reactNativeFirebase2.default.auth().currentUser.uid;
+
+        var database = _this.state.database;
+        var that = _this;
+        database.ref('test/' + userId).on('value', function (snapshot) {
+          that.setState({
+            data: (0, _immutabilityHelper2.default)(that.state.data, {
+              $push: [snapshot.val()]
+            })
+          });
+        });
+      };
+
+      _this.createCall = function () {
+        var userId = _reactNativeFirebase2.default.auth().currentUser.uid;
+
+        var database = _this.state.database;
+        database.ref('test/' + userId).set({
+          data: "Hey, this worked again"
+        });
+      };
+
+      _this.state = {
+        user: props.user,
+        database: _reactNativeFirebase2.default.database(),
+        data: []
+      };
+      _this.initListener = _this.initListener.bind(_this);
+      _this.getData = _this.getData.bind(_this);
+      return _this;
+    }
+
+    _createClass(HomeScreen, [{
+      key: "getData",
+      value: function getData() {
+        var that = this;
+        var data = this.state.data;
+        console.log(data);
+
+        for (var i = 0; i < data.length; i++) {
+          console.log(data[i]);
+        }
+
+        return _react3.default.createElement(
+          _reactNative.View,
+          {
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 56
+            }
+          },
+          data.map(function (data, idx) {
+            return _react3.default.createElement(
+              _reactNative.View,
+              {
+                key: idx,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 58
+                }
+              },
+              _react3.default.createElement(
+                _reactNative.Text,
+                {
+                  style: styles.text,
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 59
+                  }
+                },
+                data.data
+              )
+            );
+          })
+        );
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this2 = this;
+
+        return _react3.default.createElement(
+          _reactNative.View,
+          {
+            style: styles.view,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 68
+            }
+          },
+          _react3.default.createElement(
+            _reactNative.View,
+            {
+              style: styles.content,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 69
+              }
+            },
+            this.getData(),
+            _react3.default.createElement(
+              _reactNative.Text,
+              {
+                style: styles.text,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 71
+                }
+              },
+              "Start A Call"
+            ),
+            _react3.default.createElement(_reactNative.Button, {
+              title: "Start",
+              onPress: this.createCall,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 72
+              }
+            }),
+            _react3.default.createElement(_reactNative.Button, {
+              title: "Go to Details Page",
+              onPress: function onPress() {
+                return _this2.props.navigation.navigate('Details');
+              },
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 73
+              }
+            })
+          )
+        );
+      }
+    }]);
+
+    return HomeScreen;
+  }(_react2.Component));
+
+  exports.default = HomeScreen;
+
+  var styles = _reactNative.StyleSheet.create({
+    view: {
+      flex: 1,
+      padding: 25,
+      backgroundColor: '#2d3033',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    content: {
+      flex: 1
+    },
+    text: {
+      color: '#0aa0d9',
+      fontSize: 20,
+      textAlign: 'center'
+    }
+  });
+});

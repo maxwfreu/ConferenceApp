@@ -112,8 +112,6 @@ export default class App extends Component {
           />
         }
 
-        {this.renderMessage()}
-
         {!user && confirmResult &&
           <SignIn
             title="Message Sent!"

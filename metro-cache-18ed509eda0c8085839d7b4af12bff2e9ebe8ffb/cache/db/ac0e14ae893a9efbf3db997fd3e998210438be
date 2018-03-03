@@ -1,0 +1,13 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _firebase = require(_dependencyMap[0], "./modules/core/firebase");
+
+  var _firebase2 = _interopRequireDefault(_firebase);
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  exports.default = _firebase2.default;
+});

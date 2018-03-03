@@ -1,0 +1,179 @@
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _react2 = require(_dependencyMap[0], "react");
+
+  var _react3 = _interopRequireDefault(_react2);
+
+  var _index = require(_dependencyMap[1], "./../../node_modules/react-transform-hmr/lib/index.js");
+
+  var _index2 = _interopRequireDefault(_index);
+
+  var _jsxFileName = "/Users/maxfreundlich/workspace/ConferenceApp/components/SignIn/CreateProfile.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _reactNative = require(_dependencyMap[2], "react-native");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var _components = {
+    CreateProfile: {
+      displayName: "CreateProfile"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: "/Users/maxfreundlich/workspace/ConferenceApp/components/SignIn/CreateProfile.js",
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var CreateProfile = _wrapComponent("CreateProfile")(function (_Component) {
+    _inherits(CreateProfile, _Component);
+
+    function CreateProfile(props) {
+      _classCallCheck(this, CreateProfile);
+
+      var _this = _possibleConstructorReturn(this, (CreateProfile.__proto__ || Object.getPrototypeOf(CreateProfile)).call(this, props));
+
+      _this.state = {
+        displayName: ''
+      };
+      _this.updateCredentials = _this.updateCredentials.bind(_this);
+      return _this;
+    }
+
+    _createClass(CreateProfile, [{
+      key: "updateCredentials",
+      value: function updateCredentials() {
+        var displayName = this.state.displayName;
+
+        if (displayName === '') {
+          this.props.onClick(this.props.phoneNumber);
+        }
+
+        this.props.onClick(this.state.displayName);
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        var _this2 = this;
+
+        var val = this.state.val;
+        return _react3.default.createElement(
+          _reactNative.View,
+          {
+            style: styles.view,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 24
+            }
+          },
+          _react3.default.createElement(
+            _reactNative.Text,
+            {
+              style: styles.title,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 25
+              }
+            },
+            " ",
+            "You seem new here",
+            " "
+          ),
+          _react3.default.createElement(
+            _reactNative.Text,
+            {
+              style: styles.text,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 26
+              }
+            },
+            " Create your account "
+          ),
+          _react3.default.createElement(_reactNative.TextInput, {
+            autoFocus: true,
+            style: styles.textInput,
+            onChangeText: function onChangeText(value) {
+              return _this2.setState({
+                displayName: value
+              });
+            },
+            placeholder: "Your Name",
+            value: val,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 27
+            }
+          }),
+          _react3.default.createElement(_reactNative.Button, {
+            title: "Finish",
+            color: "#0aa0d9",
+            style: styles.button,
+            onPress: this.updateCredentials,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 34
+            }
+          })
+        );
+      }
+    }]);
+
+    return CreateProfile;
+  }(_react2.Component));
+
+  exports.default = CreateProfile;
+
+  var styles = _reactNative.StyleSheet.create({
+    view: {
+      flex: 1,
+      padding: 25,
+      backgroundColor: '#2d3033',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    title: {
+      color: '#0aa0d9',
+      fontSize: 50,
+      textAlign: 'center',
+      position: 'absolute',
+      top: '15%'
+    },
+    textInput: {
+      height: 40,
+      marginTop: 15,
+      marginBottom: 15,
+      color: '#0aa0d9',
+      fontSize: 30,
+      textAlign: 'center',
+      borderWidth: 0.5,
+      borderColor: '#0aa0d9',
+      borderRadius: 5,
+      width: '90%'
+    },
+    text: {
+      color: '#0aa0d9',
+      fontSize: 20,
+      textAlign: 'center'
+    }
+  });
+});
