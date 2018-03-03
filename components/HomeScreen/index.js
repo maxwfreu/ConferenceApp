@@ -4,6 +4,9 @@ import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
 
 export default class HomeScreen extends Component {
+  static navigationOptions = {
+    title: 'Home',
+  };
   constructor(props) {
     super(props)
     this.state = {

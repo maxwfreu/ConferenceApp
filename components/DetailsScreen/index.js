@@ -4,6 +4,9 @@ import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
 
 export default class DetailsScreen extends Component {
+  static navigationOptions = {
+    title: 'Details',
+  };
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

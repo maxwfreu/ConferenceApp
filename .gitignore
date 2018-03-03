@@ -33,7 +33,7 @@ local.properties
 .buckconfig
 .gitattributes
 .watchmanconfig
-
+metro-cache-*
 # node.js
 #
 node_modules/
