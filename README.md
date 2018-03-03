@@ -22,5 +22,9 @@ The following build commands failed:
 	CompileC /Users/maxfreundlich/workspace/ConferenceApp/ios/build/Build/Intermediates.noindex/React.build/Debug-iphonesimulator/React.build/Objects-normal/x86_64/RCTFrameUpdate.o Base/RCTFrameUpdate.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
 (1 failure)
 ```
-#### Possible Fix
-In Xcode, **Product -> Clean**
+#### Possible Fixes
+1. Clean Xcode Cache:
+   - In Xcode, **Product -> Clean**
+1. Remove DerivedData
+   - In Xcode, **Xcode -> Prefrences -> Locations**
+   - Locate `DerivedData` and delete it.
