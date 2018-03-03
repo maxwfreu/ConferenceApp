@@ -28,3 +28,5 @@ The following build commands failed:
 1. Remove DerivedData
    - In Xcode, **Xcode -> Prefrences -> Locations**
    - Locate `DerivedData` and delete it.
+1. Remove Build
+   - Delete `/build` within `ConferenceApp/ios`
