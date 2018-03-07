@@ -19,6 +19,7 @@ export default class App extends Component {
       updateProfileError: false,
       confirmResult: null,
       loaded: false,
+      phoneNumber: null,
     };
     this.updateUserProfile = this.updateUserProfile.bind(this);
   }
@@ -59,11 +60,12 @@ export default class App extends Component {
     }
   };
 
-  updateUserProfile = (displayName) => {
+  updateUserProfile = (displayName, phoneNumber, photoURL) => {
     const user = firebase.auth().currentUser;
     const that = this;
     user.updateProfile({
       displayName: displayName,
+      photoURL: photoURL,
     }).then(function() {
       // Update successful.
       that.setState({
@@ -106,6 +108,7 @@ export default class App extends Component {
         }
         {setDisplayName && updateProfile && loaded &&
           <CreateProfile
+            user={user}
             phoneNumber={this.state.phoneNumber}
             onClick={this.updateUserProfile}
           />

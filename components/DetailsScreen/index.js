@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { View, Image, Button, Text, TextInput, StyleSheet } from 'react-native';
 import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
+import { StackNavigator } from 'react-navigation';
 
 export default class DetailsScreen extends Component {
-  static navigationOptions = {
-    title: 'Details',
-    headerRight: (
-      <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
-    ),
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Details',
+      headerLeft: (
+        <Button onPress={() => navigation.goBack()} title="Back" color="#000" />
+      ),
+      headerRight: (
+        <Button onPress={() => navigation.navigate('Details')} title="Past Calls" color="#000" />
+      ),
+    }
   };
+
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

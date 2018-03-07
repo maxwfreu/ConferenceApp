@@ -3,6 +3,7 @@ import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import HomeScreen from '../HomeScreen';
 import DetailsScreen from '../DetailsScreen';
+import PastCalls from '../PastCalls';
 
 const RootStack = StackNavigator(
   {
@@ -11,6 +12,9 @@ const RootStack = StackNavigator(
     },
     Details: {
       screen: DetailsScreen,
+    },
+    PastCalls: {
+      screen: PastCalls,
     },
   },
   {

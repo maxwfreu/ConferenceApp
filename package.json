@@ -24,7 +24,10 @@
   "dependencies": {
     "babel-core": "^6.26.0",
     "fbjs": "^0.8.16",
+    "identicon": "^2.1.1",
+    "identicon.js": "^2.3.1",
     "immutability-helper": "^2.6.5",
+    "md5": "^2.2.1",
     "pretty-format": "^22.4.0",
     "react": "^16.2.0",
     "react-native": "^0.53.0",

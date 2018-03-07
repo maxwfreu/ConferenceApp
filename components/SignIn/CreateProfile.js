@@ -1,29 +1,51 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 export default class CreateProfile extends Component {
   constructor(props) {
     super(props)
+    var Identicon = require('identicon.js');
+    var md5 = require('md5');
+    var hash = md5(props.user.phoneNumber);
+    var base64Icon = new Identicon(hash, 100).toString();
     this.state = {
       displayName: '',
+      photoURL: `data:image/gif;base64,${base64Icon}`,
     }
     this.updateCredentials = this.updateCredentials.bind(this);
+    this.updateImage = this.updateImage.bind(this);
   }
 
   updateCredentials() {
-    const { displayName } = this.state;
+    const { displayName, photoURL} = this.state;
     if (displayName === '') {
-      this.props.onClick(this.props.phoneNumber);
+      this.props.onClick(this.props.user.phoneNumber, this.props.user.phoneNumber, photoURL);
+      return;
     }
-    this.props.onClick(this.state.displayName);
+    this.props.onClick(displayName, this.props.user.phoneNumber, photoURL);
+  }
+
+  updateImage() {
+    var Identicon = require('identicon.js');
+    var md5 = require('md5');
+    var hash = md5(this.props.phoneNumber + Math.random());
+    var base64Icon = new Identicon(hash, 100).toString();
+    this.setState({
+      photoURL: `data:image/gif;base64,${base64Icon}`,
+    })
   }
 
   render() {
     const { val } = this.state;
     return (
       <View style={styles.view}>
-        <Text style={styles.title}> {`You seem new here`} </Text>
-        <Text style={styles.text}> Create your account </Text>
+        <Text style={styles.title}> Create your account  </Text>
+        <TouchableOpacity onPress={this.updateImage}>
+          <Image
+            style={styles.profileImage}
+            source={{uri: this.state.photoURL}}
+            />
+        </TouchableOpacity>
         <TextInput
           autoFocus
           style={styles.textInput}
@@ -43,12 +65,12 @@ const styles = StyleSheet.create({
     padding: 25,
     backgroundColor: '#2d3033',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%',
   },
   title: {
     color: '#0aa0d9',
-    fontSize: 50,
-    textAlign: 'center',
+    fontSize: 30,
     position: 'absolute',
     top: '15%',
   },
@@ -62,11 +84,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#0aa0d9',
     borderRadius: 5,
-    width: '90%',
+    width: '100%',
+    width: '100%',
   },
-  text: {
-    color: '#0aa0d9',
-    fontSize: 20,
-    textAlign: 'center',
-  },
+  profileImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    marginTop: -40,
+  }
 });

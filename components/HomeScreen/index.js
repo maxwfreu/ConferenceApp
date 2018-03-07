@@ -1,46 +1,51 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet, Dimensions} from 'react-native';
+import { View, Button, Text, TextInput, Image, StyleSheet, Dimensions } from 'react-native';
 import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
+import CreateCallView from './CreateCallView';
+import HomeContent from './HomeContent';
+import { StackNavigator } from 'react-navigation';
+import { getActiveCalls } from '../../static/firebase-utils';
 
 export default class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Home',
-    headerRight: (
-      <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
-    ),
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Home',
+      headerLeft: (
+        <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
+      ),
+      headerRight: (
+        <Button onPress={() => navigation.navigate('PastCalls')} title="Past Calls" color="#000" />
+      ),
+    }
   };
   constructor(props) {
     super(props)
     this.state = {
       user: firebase.auth().currentUser,
       database: firebase.database(),
-      callIds: [],
-      data: [],
       createCall: false,
+      activeCalls: [],
     }
-    this.initListener = this.initListener.bind(this);
-    this.getData = this.getData.bind(this);
   }
 
   componentDidMount = () => {
-    this.initListener();
-  }
-
-  initListener = () => {
-    const userId = firebase.auth().currentUser.uid;
     const { database } = this.state;
-    const that = this;
-    database.ref('userCalls/' + userId).on('value', function(snapshot) {
-      console.log(snapshot);
-      if(snapshot.val()){
-        that.setState({
-          callIds: update(that.state.callIds,
-            {$set: snapshot.val()}
+    getActiveCalls(database, (call) => {
+      if(call.active) {
+        this.setState({
+          activeCalls: update(this.state.activeCalls,
+             {$push: [call]}
+          )
+        });
+      } else {
+        this.setState({
+          pastCalls: update(this.state.activeCalls,
+             {$push: [call]}
           )
         });
       }
-    });
+    })
   }
 
   createCall = () => {
@@ -49,76 +54,41 @@ export default class HomeScreen extends Component {
     });
   }
 
-  getData() {
-    const that = this;
-    const { callIds } = this.state;
-    // if(callIds) {
-    //   console.log(callIds)
-    //   if(callIds[0]) {
-    //     console.log(callIds[0]);
-    //     console.log(Object.keys(callIds[0])[0])
-    //   }
-    // }
-    if(!callIds || callIds.length === 0) {
-      return (
-        <View style={styles.emptyView}>
-          <Text style={styles.text}>{`There are no active calls!`}</Text>
-        </View>
-      )
-    }
-    const callObjects = Object.keys(callIds);
-    for(var i = 0; i < callObjects.length; i++){
-      console.log(callIds[callObjects[i]]);
-    }
-
-    return (
-      <View>
-        {callObjects.map((data, idx) => {
-          const obj = callIds[callObjects[idx]];
-          const title = obj.title;
-          const creator = obj.creator;
-          return (
-            <View key={idx} style={styles.callItemView}>
-               <Text style={styles.callItemTitle}>{title}</Text>
-               <Text style={styles.callItemCreator}>Created by: {creator}</Text>
-            </View>
-          )
-        })}
-      </View>
-    );
-  }
-
   cancelCallCreation = () => {
     this.setState({
       createCall: false,
     });
   }
 
-  finishCallCreation = () => {
+  finishCallCreation = (callName) => {
     const userId = firebase.auth().currentUser.uid;
     const { database } = this.state;
     const callsRef = database.ref('calls').push();
     const userRef = database.ref('userCalls/' + userId).push();
     callsRef.set({
-      title: "MVP Sync",
+      title: callName,
       creator: this.state.user.displayName,
+      active: true,
     });
     userRef.set({
       key: callsRef.key,
-      title: "MVP Sync",
-      creator: this.state.user.displayName,
     });
     this.setState({
-      createCall: true,
+      createCall: false,
     });
   }
 
   render() {
-    const { user, data, createCall } = this.state;
-    console.log(data);
+    const { user, activeCalls, createCall } = this.state;
     return (
       <View style={styles.view}>
         <View style={styles.header}>
+          {user.photoURL &&
+            <Image
+              style={styles.profileImage}
+              source={{uri: user.photoURL}}
+              />
+          }
           <Text style={styles.text}>Welcome, {user.displayName}</Text>
         </View>
         <View style={styles.content}>
@@ -129,35 +99,16 @@ export default class HomeScreen extends Component {
             />
           ): (
             <HomeContent
-              data={data}
-              getData={this.getData}
+              navigation={this.props.navigation}
+              activeCalls={activeCalls}
+              createCall={this.createCall}
             />
           )}
-          <View style={styles.createButton}>
-            <Button color="#fff" title="Start A Call" onPress={this.createCall}/>
-          </View>
         </View>
       </View>
     );
   }
 }
-
-const CreateCallView = props => (
-  <View>
-    <Button color="#fff" title="Create" onPress={props.finishCallCreation}/>
-    <Button color="#fff" title="Cancel" onPress={props.cancelCallCreation}/>
-  </View>
-)
-
-const HomeContent = props => (
-  <View style={{flex: 1}}>
-    {props.data && (
-      <View>
-        {props.getData()}
-      </View>
-    )}
-  </View>
-)
 
 const styles = StyleSheet.create({
   view: {
@@ -167,6 +118,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
+    flexDirection: 'row',
+    paddingBottom: 20,
     borderBottomColor: '#bbb',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -179,32 +132,18 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 20,
-    textAlign: 'center',
-  },
-  createButton: {
     justifyContent: 'center',
     alignSelf: 'center',
-    position: 'absolute',
-    bottom: 0,
-    borderWidth: .5,
-    borderRadius: 5,
-    borderColor: '#0aa0d9',
-    backgroundColor: '#0aa0d9',
+    textAlign: 'left',
+    flex: 2,
+    paddingLeft: 20,
   },
-  emptyView: {
-    marginTop: 10,
-  },
-  callItemView: {
-    padding: 10,
-    backgroundColor: '#fff',
-    borderWidth: .5,
-    borderRadius: 5,
-  },
-  callItemTitle: {
-    color: '#000',
-    fontSize: 25,
-  },
-  callItemCreator: {
-    color: '#000',
+  profileImage: {
+    width: 50,
+    height: 50,
+    maxWidth: 50,
+    maxHeight: 50,
+    borderRadius: 25,
+    flex: 1,
   }
 });
