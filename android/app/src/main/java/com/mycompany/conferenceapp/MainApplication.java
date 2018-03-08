@@ -5,6 +5,20 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.react.rnspinkit.RNSpinkitPackage;
 import io.invertase.firebase.RNFirebasePackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -39,6 +53,20 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
+            new BackgroundTimerPackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
+            new BackgroundTimerPackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
             new RNSpinkitPackage(),
             new RNFirebasePackage(),
         new RNFirebasePackage(),

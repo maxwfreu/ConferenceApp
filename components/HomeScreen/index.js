@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     padding: 25,
-    backgroundColor: '#2d3033',
+    backgroundColor: '#e4e4e4',
   },
   header: {
     flex: 1,
@@ -130,13 +130,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
     justifyContent: 'center',
     alignSelf: 'center',
     textAlign: 'left',
     flex: 2,
     paddingLeft: 20,
+    fontFamily: 'Lato-Bold',
   },
   profileImage: {
     width: 50,
@@ -144,6 +145,8 @@ const styles = StyleSheet.create({
     maxWidth: 50,
     maxHeight: 50,
     borderRadius: 25,
+    borderColor: '#ff564b',
+    borderWidth: .4,
     flex: 1,
   }
 });

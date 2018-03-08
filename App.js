@@ -94,7 +94,7 @@ export default class App extends Component {
       )
     }
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2d3033' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#e4e4e4' }}>
         {!loaded &&
           <Spinner isVisible={true} size={100} type="Wave" color="#1abc9c"/>
         }

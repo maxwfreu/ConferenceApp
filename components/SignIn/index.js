@@ -91,21 +91,22 @@ const SignInView = props => (
       placeholder={props.placeholder}
       value={props.val}
     />
-    <Button title={props.buttonText} color="#0aa0d9" style={styles.button} onPress={() => props.onClick(props.val)} />
+    <View style={styles.button}>
+      <Button title={props.buttonText} color="#fff" onPress={() => props.onClick(props.val)} />
+    </View>
     {props.error &&
       <Text style={styles.error}>{`That doesn't seem right... try again`}</Text>
     }
   </View>
 )
 
-// #2d3033 - gray
 const styles = StyleSheet.create({
   view: {
     flex: 1,
     padding: 25,
-    backgroundColor: '#2d3033',
+    backgroundColor: '#e4e4e4',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     color: '#0aa0d9',
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     position: 'absolute',
     top: '15%',
+    fontFamily: 'Lato-Bold',
   },
   textInput: {
     height: 40,
@@ -122,18 +124,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     borderWidth: 0.5,
-    borderColor: '#0aa0d9',
+    borderColor: '#ff564b',
     borderRadius: 5,
     width: '90%',
+    fontFamily: 'Lato-Light',
   },
   text: {
     color: '#0aa0d9',
     fontSize: 20,
     textAlign: 'center',
+    fontFamily: 'Lato-Regular',
   },
   error: {
     color: 'red',
     fontSize: 20,
     textAlign: 'center',
   },
+  button: {
+    color: '#fff',
+    backgroundColor: '#0aa0d9',
+    width: '100%',
+  }
 });

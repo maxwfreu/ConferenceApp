@@ -21,9 +21,10 @@ target 'ConferenceApp' do
   pod 'Firebase/Messaging'
   pod 'Firebase/RemoteConfig'
   pod 'Firebase/Storage'
-  
+
   pod 'Fabric', '~> 1.7.2'
   pod 'Crashlytics', '~> 3.9.3'
   pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
+  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
 end

@@ -74,20 +74,20 @@ const styles = StyleSheet.create({
   },
   callItemView: {
     padding: 10,
-    backgroundColor: '#90EE90',
-    borderWidth: .5,
-    borderRadius: 5,
+    backgroundColor: '#264563',
     height: 100,
     marginTop: 20,
     width: '100%',
   },
   callItemTitle: {
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
     fontSize: 25,
+    fontFamily: 'Lato-Regular',
   },
   callItemCreator: {
     textAlign: 'center',
-    color: '#000',
+    color: '#fff',
+    fontFamily: 'Lato-Light',
   }
 });

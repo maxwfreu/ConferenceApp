@@ -53,7 +53,9 @@ export default class CreateProfile extends Component {
           placeholder="Your Name"
           value={val}
         />
-        <Button title="Finish" color="#0aa0d9" style={styles.button} onPress={this.updateCredentials} />
+        <View style={styles.button}>
+          <Button title="Finish" color="#fff" onPress={this.updateCredentials} />
+        </View>
       </View>
     );
   }
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     padding: 25,
-    backgroundColor: '#2d3033',
+    backgroundColor: '#e4e4e4',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     borderWidth: 0.5,
-    borderColor: '#0aa0d9',
+    borderColor: '#ff564b',
     borderRadius: 5,
     width: '100%',
     width: '100%',
@@ -92,5 +94,10 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 50,
     marginTop: -40,
+  },
+  button: {
+    color: '#fff',
+    backgroundColor: '#0aa0d9',
+    width: '100%',
   }
 });
