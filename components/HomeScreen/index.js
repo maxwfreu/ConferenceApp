@@ -6,6 +6,9 @@ import CreateCallView from './CreateCallView';
 import HomeContent from './HomeContent';
 import { StackNavigator } from 'react-navigation';
 import { getActiveCalls } from '../../static/firebase-utils';
+import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Divider } from 'react-native-material-ui';
 
 export default class HomeScreen extends Component {
   static navigationOptions = ({navigation}) => {
@@ -13,9 +16,6 @@ export default class HomeScreen extends Component {
       title: 'Home',
       headerLeft: (
         <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
-      ),
-      headerRight: (
-        <Button onPress={() => navigation.navigate('PastCalls')} title="Past Calls" color="#000" />
       ),
     }
   };
@@ -91,6 +91,7 @@ export default class HomeScreen extends Component {
           }
           <Text style={styles.text}>Welcome, {user.displayName}</Text>
         </View>
+        <Divider />
         <View style={styles.content}>
           {createCall ? (
             <CreateCallView
@@ -120,8 +121,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingBottom: 20,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   content: {
     flex: 10,

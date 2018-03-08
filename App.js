@@ -3,7 +3,7 @@ import { View, Button, Text, TextInput, Image } from 'react-native';
 import SignIn from './components/SignIn';
 import CreateProfile from './components/SignIn/CreateProfile';
 import Main from './components/Main';
-
+import NewMain from './components/NewMain';
 import firebase from 'react-native-firebase';
 import Spinner from 'react-native-spinkit';
 // var Spinner = require('react-native-spinkit');
@@ -86,11 +86,16 @@ export default class App extends Component {
     if (user) {
       setDisplayName = !user.displayName || user.displayName === '';
     }
+    // if(user && loaded && !setDisplayName) {
+    //   return (
+    //     <Main
+    //       user={user}
+    //     />
+    //   )
+    // }
     if(user && loaded && !setDisplayName) {
       return (
-        <Main
-          user={user}
-        />
+        <NewMain />
       )
     }
     return (

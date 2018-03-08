@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Button, Text, TextInput, Image, StyleSheet, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export default class PastCalls extends Component {
   static navigationOptions = ({navigation}) => {
@@ -9,6 +10,8 @@ export default class PastCalls extends Component {
       headerLeft: (
         <Button onPress={() => navigation.goBack()} title="Back" color="#000" />
       ),
+      tabBarLabel: 'Past Calls',
+      tabBarIcon: () => <Icon size={24} name="replay" color="white" />
     }
   };
   render() {

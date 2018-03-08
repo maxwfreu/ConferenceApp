@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Button, Text, TextInput, Image, StyleSheet, Dimensions, ScrollView} from 'react-native';
+import { View, TouchableOpacity, Text, TextInput, Image, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import { Button, Card } from 'react-native-material-ui';
 
 export default class HomeContent extends Component {
   constructor() {
@@ -24,10 +25,14 @@ export default class HomeContent extends Component {
           const title = obj.title;
           const creator = obj.creator;
           return (
-            <TouchableOpacity key={idx} style={styles.callItemView} onPress={() => this.props.navigation.navigate('Details')}>
-               <Text style={styles.callItemTitle}>{title}</Text>
-               <Text style={styles.callItemCreator}>Created by: {creator}</Text>
-            </TouchableOpacity>
+            <View style={styles.callItemView} key={idx}>
+              <Card onPress={() => this.props.navigation.navigate('Details')}>
+                <View style={styles.callItemCard}>
+                  <Text style={styles.callItemTitle}>{title}</Text>
+                  <Text style={styles.callItemCreator}>Created by: {creator}</Text>
+                </View>
+              </Card>
+            </View>
           )
         })}
       </View>
@@ -46,14 +51,11 @@ export default class HomeContent extends Component {
             )}
           </View>
         </ScrollView>
-        <View style={styles.createButton}>
-          <Button color="#fff" title="Start A Call" onPress={this.props.createCall}/>
-        </View>
+        <Button raised primary text="Start A Call" onPress={this.props.createCall} />
       </React.Fragment>
     )
   }
 }
-
 
 const styles = StyleSheet.create({
   text: {
@@ -72,22 +74,30 @@ const styles = StyleSheet.create({
   emptyView: {
     marginTop: 10,
   },
-  callItemView: {
+  callItemCard: {
     padding: 10,
-    backgroundColor: '#264563',
     height: 100,
     marginTop: 20,
-    width: '100%',
+  },
+  callItemView: {
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    elevation: 1,
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   callItemTitle: {
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
     fontSize: 25,
     fontFamily: 'Lato-Regular',
   },
   callItemCreator: {
     textAlign: 'center',
-    color: '#fff',
+    color: '#000',
     fontFamily: 'Lato-Light',
   }
 });

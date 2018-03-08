@@ -27,4 +27,6 @@ target 'ConferenceApp' do
   pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
 end

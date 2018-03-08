@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet, Dimensions} from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Dimensions} from 'react-native';
+import { Button } from 'react-native-material-ui';
 
 export default class CreateCallView extends Component {
   constructor() {
@@ -24,11 +25,9 @@ export default class CreateCallView extends Component {
           placeholder="Call Name"
           value={this.state.callName}
         />
-        <View style={styles.finishButton}>
-          <Button color="#fff" title="Create" onPress={this.finishCallCreation}/>
-        </View>
-        <View style={styles.cancelButton}>
-          <Button color="#fff" title="Cancel" onPress={this.props.cancelCallCreation}/>
+        <Button raised primary text="Create" onPress={this.finishCallCreation} />
+        <View style={styles.cancelButton} >
+          <Button raised accent text="Cancel" onPress={this.props.cancelCallCreation} />
         </View>
       </View>
     )
@@ -50,21 +49,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  finishButton: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderWidth: .5,
-    borderRadius: 5,
-    backgroundColor: '#0aa0d9',
-    width: '100%',
-  },
   cancelButton: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    borderWidth: .5,
-    borderRadius: 5,
-    backgroundColor: '#CD5C5C',
-    width: '100%',
     marginTop: 5,
   }
 });
