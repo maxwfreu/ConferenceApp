@@ -17,21 +17,25 @@ export default class HomeContent extends Component {
         </View>
       )
     }
-    const callObjects = Object.keys(activeCalls);
     return (
       <View>
-        {callObjects.map((data, idx) => {
-          const obj = activeCalls[callObjects[idx]];
+        {activeCalls.map((obj, idx) => {
           const title = obj.title;
           const creator = obj.creator;
+          const hour = (new Date(obj.startedAt)).getHours();
+          let icon = require('../../assets/images/morning.jpg');
+          if(hour > 18) {
+            icon = require('../../assets/images/night.jpg');
+          } else if (hour > 12) {
+            icon = require('../../assets/images/dusk.jpg');
+          }
           return (
             <View style={styles.callItemView} key={idx}>
-              <Card onPress={() => this.props.navigation.navigate('Details')}>
-                <View style={styles.callItemCard}>
-                  <Text style={styles.callItemTitle}>{title}</Text>
-                  <Text style={styles.callItemCreator}>Created by: {creator}</Text>
-                </View>
-              </Card>
+              <TouchableOpacity style={styles.callItemCard} onPress={() => this.props.navigation.navigate('Details')}>
+                <Image style={{width: '100%', height: 80}} source={icon} />
+                <Text style={styles.callItemTitle}>{title}</Text>
+                <Text style={styles.callItemCreator}>Created by: {creator}</Text>
+              </TouchableOpacity>
             </View>
           )
         })}
@@ -75,9 +79,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   callItemCard: {
-    padding: 10,
-    height: 100,
+    padding: 0,
     marginTop: 20,
+    backgroundColor: '#fff',
+    paddingBottom: 10,
   },
   callItemView: {
     shadowColor: 'black',
@@ -90,14 +95,18 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   callItemTitle: {
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#000',
     fontSize: 25,
     fontFamily: 'Lato-Regular',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   callItemCreator: {
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#000',
     fontFamily: 'Lato-Light',
+    paddingLeft: 10,
+    paddingRight: 10,
   }
 });

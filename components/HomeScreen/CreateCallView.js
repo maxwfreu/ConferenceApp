@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, Dimensions} from 'react-native';
 import { Button } from 'react-native-material-ui';
+import Contact from 'react-native-contacts';
 
 export default class CreateCallView extends Component {
   constructor() {
@@ -16,6 +17,15 @@ export default class CreateCallView extends Component {
   }
 
   render() {
+    // Contacts.getAll((err, contacts) => {
+    //   if(err === 'denied'){
+    //     // error
+    //     console.log(err)
+    //   } else {
+    //     // contacts returned in []
+    //     console.log(contacts)
+    //   }
+    // })
     return(
       <View>
         <TextInput

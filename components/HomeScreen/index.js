@@ -31,19 +31,18 @@ export default class HomeScreen extends Component {
 
   componentDidMount = () => {
     const { database } = this.state;
-    getActiveCalls(database, (call) => {
-      if(call.active) {
-        this.setState({
-          activeCalls: update(this.state.activeCalls,
-             {$push: [call]}
-          )
-        });
-      } else {
-        this.setState({
-          pastCalls: update(this.state.activeCalls,
-             {$push: [call]}
-          )
-        });
+    getActiveCalls(database, (calls) => {
+      for(const i in calls) {
+        const call = calls[i];
+        const activeCalls = this.state.activeCalls;
+        const inActiveCalls = activeCalls.filter(activeCall => activeCall.key === call.key);
+        if(call.active && inActiveCalls.length !== 1) {
+          this.setState({
+            activeCalls: update(this.state.activeCalls,
+               {$push: [call]}
+            )
+          });
+        }
       }
     })
   }
@@ -65,13 +64,19 @@ export default class HomeScreen extends Component {
     const { database } = this.state;
     const callsRef = database.ref('calls').push();
     const userRef = database.ref('userCalls/' + userId).push();
+    const startedAt = firebase.database.ServerValue.TIMESTAMP;
     callsRef.set({
       title: callName,
       creator: this.state.user.displayName,
       active: true,
+      startedAt: startedAt,
     });
     userRef.set({
       key: callsRef.key,
+      title: callName,
+      creator: this.state.user.displayName,
+      active: true,
+      startedAt: startedAt,
     });
     this.setState({
       createCall: false,
@@ -84,10 +89,12 @@ export default class HomeScreen extends Component {
       <View style={styles.view}>
         <View style={styles.header}>
           {user.photoURL &&
-            <Image
-              style={styles.profileImage}
-              source={{uri: user.photoURL}}
-              />
+            <View style={styles.imageWrap}>
+              <Image
+                style={styles.profileImage}
+                source={{uri: user.photoURL}}
+                />
+            </View>
           }
           <Text style={styles.text}>Welcome, {user.displayName}</Text>
         </View>
@@ -139,13 +146,24 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Bold',
   },
   profileImage: {
+    borderRadius: 25,
+    borderColor: '#ff564b',
+    borderWidth: .4,
+    flex: 1,
+  },
+  imageWrap: {
     width: 50,
     height: 50,
     maxWidth: 50,
     maxHeight: 50,
     borderRadius: 25,
-    borderColor: '#ff564b',
-    borderWidth: .4,
-    flex: 1,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    elevation: 1,
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   }
 });
