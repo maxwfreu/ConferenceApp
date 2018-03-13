@@ -86,7 +86,7 @@ export default class HomeScreen extends Component {
   render() {
     const { user, activeCalls, createCall } = this.state;
     return (
-      <View style={styles.view}>
+      <React.Fragment>
         <View style={styles.header}>
           {user.photoURL &&
             <View style={styles.imageWrap}>
@@ -98,36 +98,44 @@ export default class HomeScreen extends Component {
           }
           <Text style={styles.text}>Welcome, {user.displayName}</Text>
         </View>
-        <Divider />
-        <View style={styles.content}>
-          {createCall ? (
-            <CreateCallView
-              finishCallCreation={this.finishCallCreation}
-              cancelCallCreation={this.cancelCallCreation}
-            />
-          ): (
-            <HomeContent
-              navigation={this.props.navigation}
-              activeCalls={activeCalls}
-              createCall={this.createCall}
-            />
-          )}
+        <View style={styles.view}>
+          <View style={styles.content}>
+            {createCall ? (
+              <CreateCallView
+                finishCallCreation={this.finishCallCreation}
+                cancelCallCreation={this.cancelCallCreation}
+              />
+            ): (
+              <HomeContent
+                navigation={this.props.navigation}
+                activeCalls={activeCalls}
+                createCall={this.createCall}
+              />
+            )}
+          </View>
         </View>
-      </View>
+      </React.Fragment>
     );
   }
 }
 
 const styles = StyleSheet.create({
   view: {
-    flex: 1,
-    padding: 25,
+    flex: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
     backgroundColor: '#e4e4e4',
   },
   header: {
     flex: 1,
     flexDirection: 'row',
-    paddingBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
+    backgroundColor: '#264563',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   content: {
     flex: 10,
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   text: {
-    color: 'black',
+    color: '#fff',
     fontSize: 20,
     justifyContent: 'center',
     alignSelf: 'center',

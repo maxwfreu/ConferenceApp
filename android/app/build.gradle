@@ -150,6 +150,24 @@ android {
 dependencies {
     compile project(':react-native-vector-icons')
     compile project(':react-native-spinkit')
+    compile project(':react-native-simple-contacts')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-spinkit')
+    compile project(':react-native-simple-contacts')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-spinkit')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-contacts')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-spinkit')
     compile(project(':react-native-firebase')) {
         transitive = false
     }

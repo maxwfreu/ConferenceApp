@@ -5,6 +5,18 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
+import ca.bigdata.voice.contacts.BDVSimpleContactsPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import ca.bigdata.voice.contacts.BDVSimpleContactsPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -84,6 +96,18 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new VectorIconsPackage(),
+            new RNSpinkitPackage(),
+            new BDVSimpleContactsPackage(),
+            new RNFirebasePackage(),
+            new VectorIconsPackage(),
+            new RNSpinkitPackage(),
+            new BDVSimpleContactsPackage(),
+            new RNFirebasePackage(),
+            new VectorIconsPackage(),
+            new RNSpinkitPackage(),
+            new RNFirebasePackage(),
+            new ReactNativeContacts(),
             new VectorIconsPackage(),
             new RNSpinkitPackage(),
             new RNFirebasePackage(),

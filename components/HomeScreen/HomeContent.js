@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, TextInput, Image, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Button, Card } from 'react-native-material-ui';
+import * as Animatable from 'react-native-animatable';
 
 export default class HomeContent extends Component {
   constructor() {
@@ -30,13 +31,13 @@ export default class HomeContent extends Component {
             icon = require('../../assets/images/dusk.jpg');
           }
           return (
-            <View style={styles.callItemView} key={idx}>
+            <Animatable.View animation="zoomInUp" style={styles.callItemView} key={idx}>
               <TouchableOpacity style={styles.callItemCard} onPress={() => this.props.navigation.navigate('Details')}>
                 <Image style={{width: '100%', height: 80}} source={icon} />
                 <Text style={styles.callItemTitle}>{title}</Text>
                 <Text style={styles.callItemCreator}>Created by: {creator}</Text>
               </TouchableOpacity>
-            </View>
+            </Animatable.View>
           )
         })}
       </View>
