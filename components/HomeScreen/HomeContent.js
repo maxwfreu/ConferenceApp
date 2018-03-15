@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text, TextInput, Image, StyleSheet, Dimensions,
 import { StackNavigator } from 'react-navigation';
 import { Button, Card } from 'react-native-material-ui';
 import * as Animatable from 'react-native-animatable';
+import { Divider } from 'react-native-material-ui';
 
 export default class HomeContent extends Component {
   constructor() {
@@ -31,12 +32,13 @@ export default class HomeContent extends Component {
             icon = require('../../assets/images/dusk.jpg');
           }
           return (
-            <Animatable.View animation="zoomInUp" style={styles.callItemView} key={idx}>
+            <Animatable.View animation="zoomInUp" key={idx}>
               <TouchableOpacity style={styles.callItemCard} onPress={() => this.props.navigation.navigate('Details')}>
                 <Image style={{width: '100%', height: 80}} source={icon} />
                 <Text style={styles.callItemTitle}>{title}</Text>
                 <Text style={styles.callItemCreator}>Created by: {creator}</Text>
               </TouchableOpacity>
+              <Divider />
             </Animatable.View>
           )
         })}
@@ -56,7 +58,6 @@ export default class HomeContent extends Component {
             )}
           </View>
         </ScrollView>
-        <Button raised primary text="Start A Call" onPress={this.props.createCall} />
       </React.Fragment>
     )
   }
@@ -84,16 +85,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: '#fff',
     paddingBottom: 10,
-  },
-  callItemView: {
-    shadowColor: 'black',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    elevation: 1,
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
   },
   callItemTitle: {
     textAlign: 'left',

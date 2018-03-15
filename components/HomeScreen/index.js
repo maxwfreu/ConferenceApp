@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { View, Button, Text, TextInput, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Dimensions } from 'react-native';
 import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
-import CreateCallView from './CreateCallView';
 import HomeContent from './HomeContent';
 import { StackNavigator } from 'react-navigation';
 import { getActiveCalls } from '../../static/firebase-utils';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Divider } from 'react-native-material-ui';
+import { Button, Card } from 'react-native-material-ui';
 
 export default class HomeScreen extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Home',
       headerLeft: (
-        <Button onPress={() => firebase.auth().signOut()} title="Sign Out" color="#000" />
+        <Button onPress={() => firebase.auth().signOut()} text="Sign Out" />
+      ),
+      headerRight: (
+        <Button primary text="Start A Call" onPress={() => navigation.navigate('CreateCall')} />
       ),
     }
   };
@@ -24,7 +26,6 @@ export default class HomeScreen extends Component {
     this.state = {
       user: firebase.auth().currentUser,
       database: firebase.database(),
-      createCall: false,
       activeCalls: [],
     }
   }
@@ -47,44 +48,8 @@ export default class HomeScreen extends Component {
     })
   }
 
-  createCall = () => {
-    this.setState({
-      createCall: true,
-    });
-  }
-
-  cancelCallCreation = () => {
-    this.setState({
-      createCall: false,
-    });
-  }
-
-  finishCallCreation = (callName) => {
-    const userId = firebase.auth().currentUser.uid;
-    const { database } = this.state;
-    const callsRef = database.ref('calls').push();
-    const userRef = database.ref('userCalls/' + userId).push();
-    const startedAt = firebase.database.ServerValue.TIMESTAMP;
-    callsRef.set({
-      title: callName,
-      creator: this.state.user.displayName,
-      active: true,
-      startedAt: startedAt,
-    });
-    userRef.set({
-      key: callsRef.key,
-      title: callName,
-      creator: this.state.user.displayName,
-      active: true,
-      startedAt: startedAt,
-    });
-    this.setState({
-      createCall: false,
-    });
-  }
-
   render() {
-    const { user, activeCalls, createCall } = this.state;
+    const { user, activeCalls } = this.state;
     return (
       <React.Fragment>
         <View style={styles.header}>
@@ -100,18 +65,10 @@ export default class HomeScreen extends Component {
         </View>
         <View style={styles.view}>
           <View style={styles.content}>
-            {createCall ? (
-              <CreateCallView
-                finishCallCreation={this.finishCallCreation}
-                cancelCallCreation={this.cancelCallCreation}
-              />
-            ): (
-              <HomeContent
-                navigation={this.props.navigation}
-                activeCalls={activeCalls}
-                createCall={this.createCall}
-              />
-            )}
+            <HomeContent
+              navigation={this.props.navigation}
+              activeCalls={activeCalls}
+            />
           </View>
         </View>
       </React.Fragment>
@@ -124,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 10,
     paddingLeft: 25,
     paddingRight: 25,
-    backgroundColor: '#e4e4e4',
+    backgroundColor: '#fff',
   },
   header: {
     flex: 1,

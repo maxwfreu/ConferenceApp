@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    color: '#fff',
     backgroundColor: '#0aa0d9',
     width: '100%',
   }

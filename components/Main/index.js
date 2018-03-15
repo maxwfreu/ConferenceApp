@@ -3,6 +3,7 @@ import { View, Button, Text, TextInput, Image, StyleSheet } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import HomeScreen from '../HomeScreen';
 import DetailsScreen from '../DetailsScreen';
+import CreateCallScreen from '../CreateCallScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { COLOR, ThemeProvider } from 'react-native-material-ui';
 
@@ -14,6 +15,9 @@ const RootStack = StackNavigator(
     Details: {
       screen: DetailsScreen,
     },
+    CreateCall: {
+      screen: CreateCallScreen,
+    }
   },
   {
     initialRouteName: 'Home',
