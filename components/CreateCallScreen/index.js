@@ -1,11 +1,11 @@
 import React, { Component} from 'react';
-import { View, Text, TextInput, Image, StyleSheet, Dimensions, FlatList, TouchableHighlight, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Dimensions, FlatList, TouchableHighlight, ActivityIndicator, ListView } from 'react-native';
 import { Button, Subheader } from 'react-native-material-ui';
 import simpleContacts from 'react-native-simple-contacts';
 import * as Animatable from 'react-native-animatable';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import firebase from 'react-native-firebase';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, NavigationActions } from 'react-navigation';
 
 // import DropDown, { Select, Option, OptionList } from 'react-native-selectme';
 
@@ -27,12 +27,14 @@ export default class CreateCallScreen extends Component {
       filteredContacts: [],
       database: firebase.database(),
       loading: true,
+      user: firebase.auth().currentUser,
     }
     this.finishCallCreation = this.finishCallCreation.bind(this);
     this.filterList = this.filterList.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.itemPress = this.itemPress.bind(this);
+    this.renderListItem = this.renderListItem.bind(this);
   }
 
   componentWillMount() {
@@ -50,7 +52,8 @@ export default class CreateCallScreen extends Component {
 
   finishCallCreation() {
     const userId = firebase.auth().currentUser.uid;
-    const { database, callName } = this.state;
+    const { database, callName, contacts } = this.state;
+    const selectedContacts = contacts.filter((item) => item.selected).map((item) => item.number);
     const callsRef = database.ref('calls').push();
     const userRef = database.ref('userCalls/' + userId).push();
     const startedAt = firebase.database.ServerValue.TIMESTAMP;
@@ -59,6 +62,7 @@ export default class CreateCallScreen extends Component {
       creator: this.state.user.displayName,
       active: true,
       startedAt: startedAt,
+      members: selectedContacts,
     });
     userRef.set({
       key: callsRef.key,
@@ -67,6 +71,14 @@ export default class CreateCallScreen extends Component {
       active: true,
       startedAt: startedAt,
     });
+    const resetAction = NavigationActions.reset({
+      index: 1,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Home' }),
+        NavigationActions.navigate({ routeName: 'Details' })
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
   }
 
 
@@ -76,6 +88,27 @@ export default class CreateCallScreen extends Component {
       return (item.number.toLowerCase().search(val.toLowerCase()) !== -1 || item.name.toLowerCase().search(val.toLowerCase()) !== -1);
     });
     this.setState({filteredContacts: updatedList});
+  }
+
+  renderListItem({item, index, onPress}) {
+    if(item.selected) {
+      return (
+        <ListItem
+          containerStyle={{backgroundColor: 'rgba(10, 160, 217, 0.4)'}}
+          title={item.name}
+          subtitle={item.number}
+          onPress={() => this.itemPress(index)}
+        />
+      )
+    } else {
+      return (
+        <ListItem
+          title={item.name}
+          subtitle={item.number}
+          onPress={() => this.itemPress(index)}
+        />
+      );
+    }
   }
 
   renderHeader() {
@@ -100,14 +133,23 @@ export default class CreateCallScreen extends Component {
   };
 
   itemPress(i) {
-    let { filteredContacts } = this.state;
-    filteredContacts[i].selected = true;
-    this.setState({filteredContacts: filteredContacts});
-    this.forceUpdate();
+    let filteredContacts = this.state.filteredContacts;
+    if(filteredContacts[i].selected){
+      filteredContacts[i].selected = false;
+    } else {
+      filteredContacts[i].selected = true;
+    }
+    this.setState({
+      filteredContacts: filteredContacts,
+      flip: !this.state.flip,
+    });
   }
 
   render() {
-    const { section, callName, filteredContacts} = this.state;
+    const { section, callName, contacts, filteredContacts} = this.state;
+    const selectedContacts = contacts.filter((item) => item.selected);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.name !== r2.name});
+    const dataSource = ds.cloneWithRows(selectedContacts)
     return (
       <View style={styles.createCallView}>
         {section === 0 &&
@@ -122,11 +164,14 @@ export default class CreateCallScreen extends Component {
         {section === 1 &&
           <InviteView
             contacts={filteredContacts}
+            dataSource={dataSource}
+            numSelected={selectedContacts.length}
             filterList={this.filterList}
             renderHeader={this.renderHeader}
             renderFooter={this.renderFooter}
+            renderListItem={this.renderListItem}
             finish={this.finishCallCreation}
-            itemPress={this.itemPress}
+            flip={this.state.flip}
           />
         }
       </View>
@@ -147,51 +192,44 @@ const CallDetails = (props) => (
   </Animatable.View>
 );
 
-const InviteView = (props) => (
+const InviteView = (props) => {
+  console.log("RENDER")
+  console.log(props.selectedContacts)
+  return (
   <Animatable.View style={styles.inviteView} animation="fadeInLeft">
     <List style={styles.flatList}>
       <FlatList
+        extraData={props.flip}
         style={styles.flatList}
         data={props.contacts}
-        renderItem={({item, index}) => {
-          console.log(item.selected)
-          if(item.selected) {
-            return (
-              <View>
-                <ListItem
-                  title={item.name}
-                  subtitle={item.number}
-                  onPress={() => {
-                    props.itemPress(index)
-                  }}
-                />
-              </View>
-            )
-          } else {
-            return (
-              <ListItem
-                title={item.name}
-                subtitle={item.number}
-                onPress={() => props.itemPress(index)}
-              />
-            );
-          }
-        }}
+        renderItem={(item, index) => props.renderListItem(item, index)}
         ListHeaderComponent={props.renderHeader}
         ListFooterComponent={props.renderFooter}
       />
     </List>
+    <View>
+      <Text>
+        Selected: {props.numSelected}
+      </Text>
+      <ListView
+        horizontal={true}
+        dataSource={props.dataSource}
+        renderRow={(rowData) => <Text>{rowData.name}, </Text>}
+      />
+    </View>
     <View style={styles.buttonView}>
-      <Button raised primary text="Create" onPress={props.finishCallCreation} style={{ container: { height: 50} }}/>
+      <Button raised primary text="Create" onPress={props.finish} style={{ container: { height: 50} }}/>
     </View>
   </Animatable.View>
-);
+  )
+};
 
 const styles = StyleSheet.create({
   inviteView: {
     height: '100%',
     padding: 0,
     margin: 0,
+    backgroundColor: '#fff',
   },
   createCallView: {
     height: '100%',
@@ -224,13 +262,18 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   flatList: {
-    height: '100%',
+    height: '80%',
     margin: 0,
     padding: 0,
   },
   buttonView: {
     position: 'absolute',
     bottom: 0,
-    width: '100%',
+    width: '90%',
+    marginBottom: 5,
+    alignSelf: 'center',
+  },
+  selectedView: {
+    backgroundColor: '#fff',
   }
 });

@@ -23,10 +23,10 @@ const TabNav = TabNavigator(
         rippleColor: 'white',
         tabs: {
           Main: {
-            barBackgroundColor: '#00796B'
+            barBackgroundColor: '#0aa0d9'
           },
           PastCalls: {
-            barBackgroundColor: '#5D4037'
+            barBackgroundColor: '#ff564b'
           }
         }
       }
