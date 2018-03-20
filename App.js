@@ -65,7 +65,7 @@ export default class App extends Component {
 
   updateUserProfile(displayName, phoneNumber, photoURL) {
     console.log("SAVING")
-    saveUserAccount(() => {
+    saveUserAccount(displayName, phoneNumber, photoURL, () => {
       this.setState({
         updateProfile: false,
         user: firebase.auth().currentUser,

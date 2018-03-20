@@ -10,9 +10,8 @@ const getActiveCalls = (database, callBack) => {
 }
 
 const saveUserAccount = (displayName, phoneNumber, photoURL, success, failure) => {
-	 console.log("HERE")
+	console.log("HERE")
 	const user = firebase.auth().currentUser;
-	const that = this;
 	user.updateProfile({
 	  displayName: displayName,
 	  photoURL: photoURL,
@@ -22,8 +21,7 @@ const saveUserAccount = (displayName, phoneNumber, photoURL, success, failure) =
 	  success();
 	}).catch(function(error) {
 	  // An error happened.
-	  			    console.log("NO")
-
+	  console.log("NO")
 	  failure();  
 	});
 	console.log("DOING THIS")
