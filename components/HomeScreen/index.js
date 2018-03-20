@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
 import HomeContent from './HomeContent';
@@ -14,7 +14,12 @@ export default class HomeScreen extends Component {
     return {
       title: 'Home',
       headerLeft: (
-        <Button onPress={() => firebase.auth().signOut()} text="Sign Out" />
+        <TouchableOpacity style={styles.imageWrap} onPress={() => firebase.auth().signOut()}>
+          <Image
+            style={styles.profileImage}
+            source={{uri: firebase.auth().currentUser.photoURL}}
+            />
+        </TouchableOpacity>
       ),
       headerRight: (
         <Button primary text="Start A Call" onPress={() => navigation.navigate('CreateCall')} />
@@ -52,17 +57,6 @@ export default class HomeScreen extends Component {
     const { user, activeCalls } = this.state;
     return (
       <React.Fragment>
-        <View style={styles.header}>
-          {user.photoURL &&
-            <View style={styles.imageWrap}>
-              <Image
-                style={styles.profileImage}
-                source={{uri: user.photoURL}}
-                />
-            </View>
-          }
-          <Text style={styles.text}>Welcome, {user.displayName}</Text>
-        </View>
         <View style={styles.view}>
           <View style={styles.content}>
             <HomeContent
@@ -83,19 +77,8 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     backgroundColor: '#fff',
   },
-  header: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 25,
-    paddingRight: 25,
-    backgroundColor: '#264563',
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
   content: {
-    flex: 10,
+    flex: 1,
     justifyContent: 'center',
     alignSelf: 'center',
     width: '100%',
@@ -117,11 +100,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageWrap: {
-    width: 50,
-    height: 50,
-    maxWidth: 50,
-    maxHeight: 50,
-    borderRadius: 25,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     shadowColor: 'black',
     shadowOffset: {
       width: 0,
@@ -130,5 +111,6 @@ const styles = StyleSheet.create({
     elevation: 1,
     shadowOpacity: 0.2,
     shadowRadius: 2,
+    marginLeft: 15,
   }
 });

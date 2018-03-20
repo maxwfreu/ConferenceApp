@@ -13,51 +13,51 @@ export default class HomeContent extends Component {
 
   getData(activeCalls) {
     if(!activeCalls || activeCalls.length === 0) {
+      console.log("nothing")
       return (
         <View style={styles.emptyView}>
           <Text style={styles.text}>{`There are no active calls!`}</Text>
+          <Button primary raised text="Start one Now" onPress={() => this.props.navigation.navigate('CreateCall')} />
         </View>
       )
     }
     return (
-      <View>
-        {activeCalls.map((obj, idx) => {
-          const title = obj.title;
-          const creator = obj.creator;
-          const hour = (new Date(obj.startedAt)).getHours();
-          let icon = require('../../assets/images/morning.jpg');
-          if(hour > 18) {
-            icon = require('../../assets/images/night.jpg');
-          } else if (hour > 12) {
-            icon = require('../../assets/images/dusk.jpg');
-          }
-          return (
-            <Animatable.View animation="zoomInUp" key={idx}>
-              <TouchableOpacity style={styles.callItemCard} onPress={() => this.props.navigation.navigate('Details')}>
-                <Image style={{width: '100%', height: 80}} source={icon} />
-                <Text style={styles.callItemTitle}>{title}</Text>
-                <Text style={styles.callItemCreator}>Created by: {creator}</Text>
-              </TouchableOpacity>
-              <Divider />
-            </Animatable.View>
-          )
-        })}
-      </View>
+      <ScrollView>
+        <View style={{flex: 1}}>
+          {activeCalls.map((obj, idx) => {
+            const title = obj.title;
+            const creator = obj.creator;
+            const hour = (new Date(obj.startedAt)).getHours();
+            let icon = require('../../assets/images/morning.jpg');
+            if(hour > 18) {
+              icon = require('../../assets/images/night.jpg');
+            } else if (hour > 12) {
+              icon = require('../../assets/images/dusk.jpg');
+            }
+            return (
+              <Animatable.View animation="zoomInUp" key={idx}>
+                <TouchableOpacity style={styles.callItemCard} onPress={() => this.props.navigation.navigate('Details')}>
+                  <Image style={{width: '100%', height: 80}} source={icon} />
+                  <Text style={styles.callItemTitle}>{title}</Text>
+                  <Text style={styles.callItemCreator}>Created by: {creator}</Text>
+                </TouchableOpacity>
+                <Divider />
+              </Animatable.View>
+            )
+          })}
+        </View>
+      </ScrollView>
     );
   }
 
   render() {
     return (
       <React.Fragment>
-        <ScrollView>
+        {this.props.activeCalls && (
           <View style={{flex: 1}}>
-            {this.props.activeCalls && (
-              <View>
-                {this.getData(this.props.activeCalls)}
-              </View>
-            )}
+            {this.getData(this.props.activeCalls)}
           </View>
-        </ScrollView>
+        )}
       </React.Fragment>
     )
   }
@@ -65,7 +65,7 @@ export default class HomeContent extends Component {
 
 const styles = StyleSheet.create({
   text: {
-    color: '#fff',
+    color: '#000',
     fontSize: 20,
     textAlign: 'center',
   },
@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
   },
   emptyView: {
     marginTop: 10,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    flex: 1,
   },
   callItemCard: {
     padding: 0,
