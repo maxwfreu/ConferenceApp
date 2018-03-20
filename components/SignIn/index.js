@@ -11,6 +11,8 @@ export default class SignIn extends Component {
       confirmResult: props.confirmResult,
       error: false,
     }
+    this.signIn = this.signIn.bind(this);
+    this.confirmCode = this.confirmCode.bind(this);
   }
 
   componentDidMount() {
@@ -22,21 +24,26 @@ export default class SignIn extends Component {
     }
   }
 
-  signIn = (phoneNumber) => {
+  signIn(phoneNumber) {
+    const that = this;
     firebase.auth().signInWithPhoneNumber(phoneNumber)
       .then(confirmResult => {
-        this.props.onSignIn(phoneNumber);
-        this.setState({
+        that.props.onSignIn(phoneNumber);
+        that.setState({
           confirmResult,
           phoneNumber,
           error: false,
           val: '',
         });
       })
-      .catch(error => this.setState({ error: true }));
+      .catch(error => {
+        console.log("ERR")
+        console.log(error);
+        that.setState({ error: true });
+      });
   };
 
-  confirmCode = (codeInput) => {
+  confirmCode(codeInput){
     const { confirmResult } = this.state;
     if (confirmResult && codeInput.length) {
       confirmResult.confirm(codeInput)

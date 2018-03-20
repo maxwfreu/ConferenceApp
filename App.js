@@ -6,6 +6,7 @@ import Main from './components/Main';
 import NewMain from './components/NewMain';
 import firebase from 'react-native-firebase';
 import Spinner from 'react-native-spinkit';
+import { saveUserAccount } from './static/firebase-utils';
 // var Spinner = require('react-native-spinkit');
 
 export default class App extends Component {
@@ -22,6 +23,8 @@ export default class App extends Component {
       phoneNumber: null,
     };
     this.updateUserProfile = this.updateUserProfile.bind(this);
+    this.signIn = this.signIn.bind(this);
+    this.confirmCode = this.confirmCode.bind(this);
   }
 
   componentDidMount() {
@@ -50,31 +53,25 @@ export default class App extends Component {
      if (this.unsubscribe) this.unsubscribe();
   }
 
-  signIn = (phoneNumber) => {
+  signIn(phoneNumber) {
     this.setState({ phoneNumber: phoneNumber});
   };
 
-  confirmCode = (user) => {
+  confirmCode(user) {
     if(user) {
       this.setState({ user })
     }
   };
 
-  updateUserProfile = (displayName, phoneNumber, photoURL) => {
-    const user = firebase.auth().currentUser;
-    const that = this;
-    user.updateProfile({
-      displayName: displayName,
-      photoURL: photoURL,
-    }).then(function() {
-      // Update successful.
-      that.setState({
+  updateUserProfile(displayName, phoneNumber, photoURL) {
+    console.log("SAVING")
+    saveUserAccount(() => {
+      this.setState({
         updateProfile: false,
         user: firebase.auth().currentUser,
       });
-    }).catch(function(error) {
-      // An error happened.
-      that.setState({
+    }, () => {
+      this.setState({
         updateProfileError: true,
       });
     });

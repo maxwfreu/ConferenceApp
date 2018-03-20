@@ -9,6 +9,31 @@ const getActiveCalls = (database, callBack) => {
   });
 }
 
+const saveUserAccount = (displayName, phoneNumber, photoURL, success, failure) => {
+	 console.log("HERE")
+	const user = firebase.auth().currentUser;
+	const that = this;
+	user.updateProfile({
+	  displayName: displayName,
+	  photoURL: photoURL,
+	}).then(function() {
+	console.log("YE")
+	  // Update successful.
+	  success();
+	}).catch(function(error) {
+	  // An error happened.
+	  			    console.log("NO")
+
+	  failure();  
+	});
+	console.log("DOING THIS")
+	firebase.database().ref('users/' + phoneNumber).set({
+		displayName: displayName,
+		photoURL: photoURL,
+	})
+}
+
 module.exports = {
   getActiveCalls,
+  saveUserAccount,
 }
