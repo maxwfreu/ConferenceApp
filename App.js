@@ -6,7 +6,7 @@ import Main from './components/Main';
 import NewMain from './components/NewMain';
 import firebase from 'react-native-firebase';
 import Spinner from 'react-native-spinkit';
-import { saveUserAccount } from './static/firebase-utils';
+import FirebaseUtils from './static/firebase-utils';
 // var Spinner = require('react-native-spinkit');
 
 export default class App extends Component {
@@ -65,7 +65,7 @@ export default class App extends Component {
 
   updateUserProfile(displayName, phoneNumber, photoURL) {
     console.log("SAVING")
-    saveUserAccount(displayName, phoneNumber, photoURL, () => {
+    FirebaseUtils.saveUserAccount(displayName, phoneNumber, photoURL, () => {
       this.setState({
         updateProfile: false,
         user: firebase.auth().currentUser,

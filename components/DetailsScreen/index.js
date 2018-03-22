@@ -3,11 +3,15 @@ import { View, Image, Button, Text, TextInput, StyleSheet } from 'react-native';
 import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
 import { StackNavigator } from 'react-navigation';
+import FirebaseUtils from '../../static/firebase-utils';
+import MainDetailView from './MainDetailView';
+import TimerView from './TimerView';
 
 export default class DetailsScreen extends Component {
   static navigationOptions = ({navigation}) => {
+    const { params } = navigation.state;
     return {
-      title: 'Details',
+      title: (params && params.call) ? params.call.title : 'Details',
       headerLeft: (
         <Button onPress={() => navigation.goBack()} title="Back" color="#000" />
       ),
@@ -17,22 +21,40 @@ export default class DetailsScreen extends Component {
   constructor() {
     super();
     this.state = {
-      time: 0,
+      members: [],
     };
-    this.setupTimer = this.setupTimer.bind(this);
   }
 
   componentDidMount() {
-    this.setupTimer();
+    this.getMembers();
   }
 
-  setupTimer() {
-    const that = this;
-    setInterval(function(){
-      that.setState({
-        time: that.state.time + 1,
-      });
-    }, 1000);
+  getMembers() {
+    const { params } = this.props.navigation.state;
+    FirebaseUtils.getMembersInCall(params.call.key, (obj) => {
+      if(obj && obj.members) {
+        FirebaseUtils.getMemberDetailsInCall(obj.members, (num, member) => {
+          if(member) {
+            member.exists = true;
+            this.setState({
+              members: update(this.state.members,
+                 {$push: [member]}
+              )
+            });
+          } else{
+            const tempMember = {
+              displayName: num,
+              exists: false,
+            }
+            this.setState({
+              members: update(this.state.members,
+                 {$push: [tempMember]}
+              )
+            });
+          }
+        })
+      }
+    });
   }
 
   render() {
@@ -40,46 +62,34 @@ export default class DetailsScreen extends Component {
     // //code that will be called every 3 seconds
     // },
     // 3000);
-    const seconds = ('0' + this.state.time % 60).slice(-2);
-    const minutes = ('0' + parseInt(this.state.time / 60)).slice(-2);
-    const hours = ('0' + parseInt(minutes / 60)).slice(-2);
     return (
       <View style={styles.view}>
         <View style={styles.timerView}>
-          <Text style={styles.timerHeader}>Meeting Duration: </Text>
-          <Text style={styles.timer}>{hours}:{minutes}:{seconds}</Text>
+          <TimerView />
         </View>
-        <Button
-          title="Go to Details... again"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
+        <View style={styles.mainView}>
+          <MainDetailView members={this.state.members} />
+        </View>
       </View>
     );
   }
 }
 
+
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    padding: 25,
     backgroundColor: '#e4e4e4',
+    paddingTop: 25,
   },
   timerView: {
-    flex: 1,
-    flexDirection: 'row',
+    height: 30,
+    width: '100%',
+    paddingLeft: 25,
+    paddingRight: 25,
   },
-  timerHeader: {
-    fontFamily: 'Lato-Bold',
-    fontSize: 20,
-  },
-  timer: {
-    flex: 1,
-    fontFamily: 'Lato-Light',
-    fontSize: 20,
-    textAlign: 'right',
-  },
+  mainView: {
+    width: '100%',
+    height: '100%',
+  }
 });

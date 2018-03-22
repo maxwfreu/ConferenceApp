@@ -9,6 +9,13 @@ export default class HomeContent extends Component {
   constructor() {
     super();
     this.getData = this.getData.bind(this);
+    this.navigateToDetails = this.navigateToDetails.bind(this);
+  }
+
+  navigateToDetails(call) {
+    this.props.navigation.navigate('Details', {
+      call: call,
+    })
   }
 
   getData(activeCalls) {
@@ -36,7 +43,7 @@ export default class HomeContent extends Component {
             }
             return (
               <Animatable.View animation="zoomInUp" key={idx}>
-                <TouchableOpacity style={styles.callItemCard} onPress={() => this.props.navigation.navigate('Details')}>
+                <TouchableOpacity style={styles.callItemCard} onPress={() => this.navigateToDetails(obj)}>
                   <Image style={{width: '100%', height: 80}} source={icon} />
                   <Text style={styles.callItemTitle}>{title}</Text>
                   <Text style={styles.callItemCreator}>Created by: {creator}</Text>

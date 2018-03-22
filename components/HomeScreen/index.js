@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 import firebase from 'react-native-firebase';
 import HomeContent from './HomeContent';
 import { StackNavigator } from 'react-navigation';
-import { getActiveCalls } from '../../static/firebase-utils';
+import FirebaseUtils from '../../static/firebase-utils';
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button, Card } from 'react-native-material-ui';
@@ -37,7 +37,7 @@ export default class HomeScreen extends Component {
 
   componentDidMount = () => {
     const { database } = this.state;
-    getActiveCalls(database, (calls) => {
+    FirebaseUtils.getActiveCalls(database, (calls) => {
       for(const i in calls) {
         const call = calls[i];
         const activeCalls = this.state.activeCalls;

@@ -6,6 +6,7 @@ import * as Animatable from 'react-native-animatable';
 import { List, ListItem, SearchBar } from "react-native-elements";
 import firebase from 'react-native-firebase';
 import { StackNavigator, NavigationActions } from 'react-navigation';
+import FirebaseUtils from '../../static/firebase-utils';
 
 // import DropDown, { Select, Option, OptionList } from 'react-native-selectme';
 
@@ -51,34 +52,18 @@ export default class CreateCallScreen extends Component {
   }
 
   finishCallCreation() {
-    const userId = firebase.auth().currentUser.uid;
-    const { database, callName, contacts } = this.state;
-    const selectedContacts = contacts.filter((item) => item.selected).map((item) => item.number);
-    const callsRef = database.ref('calls').push();
-    const userRef = database.ref('userCalls/' + userId).push();
-    const startedAt = firebase.database.ServerValue.TIMESTAMP;
-    callsRef.set({
-      title: callName,
-      creator: this.state.user.displayName,
-      active: true,
-      startedAt: startedAt,
-      members: selectedContacts,
+    const { callName, contacts } = this.state;
+    const that = this;
+    FirebaseUtils.createCall(callName, contacts, () => {
+      const resetAction = NavigationActions.reset({
+        index: 1,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Home' }),
+          NavigationActions.navigate({ routeName: 'Details' })
+        ],
+      });
+      that.props.navigation.dispatch(resetAction);
     });
-    userRef.set({
-      key: callsRef.key,
-      title: callName,
-      creator: this.state.user.displayName,
-      active: true,
-      startedAt: startedAt,
-    });
-    const resetAction = NavigationActions.reset({
-      index: 1,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Home' }),
-        NavigationActions.navigate({ routeName: 'Details' })
-      ],
-    });
-    this.props.navigation.dispatch(resetAction);
   }
 
 
@@ -193,8 +178,6 @@ const CallDetails = (props) => (
 );
 
 const InviteView = (props) => {
-  console.log("RENDER")
-  console.log(props.selectedContacts)
   return (
   <Animatable.View style={styles.inviteView} animation="fadeInLeft">
     <List style={styles.flatList}>
